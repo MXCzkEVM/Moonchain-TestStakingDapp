@@ -313,6 +313,32 @@ class L1Repository {
     }
   }
 
+  // MxcToken.approve
+  Future<(bool, String)> approve(double aAmount) async {
+    if ((connected) && (isContractReady())) {
+      try {
+        final stakeAmountWei = mxcToWei(aAmount);
+        final stakeAmount = '0x${stakeAmountWei.toRadixString(16)}';
+
+        // approve
+        final txnHash = await _sendAndWait(
+            mxcTokenContract!, 'approve', [l1StakingAddress, stakeAmount]);
+
+        return (true, txnHash);
+      } catch (aError) {
+        final decodedReason =
+            _decodeRevertReason(mxcTokenContract!, aError.toString());
+        lastError = 'approve failed. ${aError.toString()}';
+        if (decodedReason.isNotEmpty) {
+          lastError = '$lastError\nRevert reason: $decodedReason';
+        }
+        debugPrint(lastError);
+        return (false, '');
+      }
+    }
+    return (false, '');
+  }
+
   // ZkCenter.miningGroupGetId
   Future<BigInt?> miningGroupGetId() async {
     try {
@@ -445,30 +471,21 @@ class L1Repository {
     }
   }
 
-  // MxcToken.approve
-  Future<(bool, String)> approve(double aAmount) async {
-    if ((connected) && (isContractReady())) {
-      try {
-        final stakeAmountWei = mxcToWei(aAmount);
-        final stakeAmount = '0x${stakeAmountWei.toRadixString(16)}';
-
-        // approve
-        final txnHash = await _sendAndWait(
-            mxcTokenContract!, 'approve', [l1StakingAddress, stakeAmount]);
-
-        return (true, txnHash);
-      } catch (aError) {
-        final decodedReason =
-            _decodeRevertReason(mxcTokenContract!, aError.toString());
-        lastError = 'approve failed. ${aError.toString()}';
-        if (decodedReason.isNotEmpty) {
-          lastError = '$lastError\nRevert reason: $decodedReason';
-        }
-        debugPrint(lastError);
-        return (false, '');
+  // ZkCenter.stakeGetCommission
+  Future<BigInt?> stakeGetCommission() async {
+    try {
+      if ((connected) && (isContractReady()) && (selectedAccount.isNotEmpty)) {
+        final resp = await promiseToFuture(
+            callMethod(zkCenterContract!, 'stakeGetCommission', []));
+        debugPrint('stakeGetCommission resp: $resp');
+        return BigInt.tryParse(resp.toString());
+      } else {
+        return null;
       }
+    } catch (aError) {
+      debugPrint('stakeGetCommission error. $aError');
+      return null;
     }
-    return (false, '');
   }
 
   // ZkCenter.miningGroupCreate
@@ -564,6 +581,28 @@ class L1Repository {
         final decodedReason =
             _decodeRevertReason(zkCenterContract!, aError.toString());
         lastError = 'stakeClaimReward failed. ${aError.toString()}';
+        if (decodedReason.isNotEmpty) {
+          lastError = '$lastError\nRevert reason: $decodedReason';
+        }
+        debugPrint(lastError);
+        return (false, '');
+      }
+    }
+    return (false, '');
+  }
+
+  // ZkCenter.stakeClaimCommission
+  Future<(bool, String)> stakeClaimCommission() async {
+    if ((connected) && (isContractReady())) {
+      try {
+        debugPrint('ZkCenter.stakeClaimCommission');
+        final txnHash =
+            await _sendAndWait(zkCenterContract!, 'stakeClaimCommission', []);
+        return (true, txnHash);
+      } catch (aError) {
+        final decodedReason =
+            _decodeRevertReason(zkCenterContract!, aError.toString());
+        lastError = 'stakeClaimCommission failed. ${aError.toString()}';
         if (decodedReason.isNotEmpty) {
           lastError = '$lastError\nRevert reason: $decodedReason';
         }

@@ -24,9 +24,6 @@ class AppData {
   ContractInfo testnetContractInfo = ContractInfo();
   ContractInfo mainnetContractInfo = ContractInfo();
 
-  // Contract json
-  String l1StakingJsonStr = '';
-
   // Startup error
   String? startupError;
 

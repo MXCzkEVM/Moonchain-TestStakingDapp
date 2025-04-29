@@ -281,12 +281,14 @@ class ButtonPanel extends StatelessWidget {
         constraints: const BoxConstraints(minHeight: 100),
         child: BlocBuilder<HomeCubit, HomeState>(
             buildWhen: (prev, current) =>
-                prev.userStakeStatus != current.userStakeStatus || prev.minerCount != current.minerCount,
+                prev.userStakeStatus != current.userStakeStatus ||
+                prev.minerCount != current.minerCount,
             builder: (context, state) {
               return Column(children: [
                 const Row(children: [SizedBox(height: 10)]),
                 OutlinedButton(
-                  onPressed: !state.userStakeStatus.isGroupLeader && state.userStakeStatus.stakingGroupId != BigInt.zero
+                  onPressed: !state.userStakeStatus.isGroupLeader &&
+                          state.userStakeStatus.stakingGroupId != BigInt.zero
                       ? null
                       : () {
                           routes.popAndPushNamed(Routes.miner);
@@ -296,7 +298,8 @@ class ButtonPanel extends StatelessWidget {
                 const SizedBox(height: 10),
                 OutlinedButton(
                   onPressed:
-                      (state.userStakeStatus.stakingGroupId != BigInt.zero) || (state.minerCount == 0)
+                      (state.userStakeStatus.stakingGroupId != BigInt.zero) ||
+                              (state.minerCount == 0)
                           ? null
                           : () {
                               routes.popAndPushNamed(Routes.createGroup);
@@ -350,6 +353,15 @@ class ButtonPanel extends StatelessWidget {
                   onPressed: () {
                     routes.popAndPushNamed(Routes.withdraw);
                   },
+                ),
+                const SizedBox(height: 10),
+                OutlinedButton(
+                  onPressed: !state.userStakeStatus.isGroupLeader
+                      ? null
+                      : () {
+                          routes.popAndPushNamed(Routes.commission);
+                        },
+                  child: const Text('Commission (Group Leader)'),
                 ),
                 const SizedBox(height: 10),
               ]);

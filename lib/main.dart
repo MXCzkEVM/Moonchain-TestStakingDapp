@@ -38,7 +38,7 @@ void main() async {
     appData.startupError = 'Load theme failed.\n${e.toString()}';
   }
 
-  // Load contract
+  // Load contract info
   try {
     final infoStr = await rootBundle
         .loadString('assets/data/contract_info.json', cache: false);
@@ -47,13 +47,8 @@ void main() async {
         infoJson['mainnet']['taikoL1Address'];
     appData.testnetContractInfo.taikoL1Address =
         infoJson['testnet']['taikoL1Address'];
-
-    final l1StakingJsonStr = await rootBundle
-        .loadString('assets/contracts/L1Staking.json', cache: false);
-    jsonDecode(l1StakingJsonStr);
-    appData.l1StakingJsonStr = l1StakingJsonStr;
   } catch (aError) {
-    appData.startupError = 'Load Contract JSON failed.\n${aError.toString()}';
+    appData.startupError = 'Load Contract Info failed.\n${aError.toString()}';
   }
 
   // Get app info

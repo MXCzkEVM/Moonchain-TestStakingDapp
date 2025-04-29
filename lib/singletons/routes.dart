@@ -7,6 +7,7 @@ import 'package:dapp/claim/claim.dart';
 import 'package:dapp/withdraw/withdraw.dart';
 import 'package:dapp/create_group/create_group.dart';
 import 'package:dapp/miner/miner.dart';
+import 'package:dapp/commission/commission.dart';
 
 import '../shared/media_wrapper.dart';
 
@@ -22,6 +23,7 @@ class Routes {
   static const String withdraw = '/withdraw';
   static const String createGroup = '/createGroup';
   static const String miner = '/miner';
+  static const String commission = '/commission';
 
   Map<String, Widget Function(BuildContext)> get() {
     return {
@@ -39,6 +41,8 @@ class Routes {
           const MediaWrapper(desginedWidth: desginedWidth, child: CreateGroupPage()),
       miner: (_) =>
           const MediaWrapper(desginedWidth: desginedWidth, child: MinerPage()),
+      commission: (_) =>
+          const MediaWrapper(desginedWidth: desginedWidth, child: CommissionPage()),
     };
   }
 
