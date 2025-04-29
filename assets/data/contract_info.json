@@ -1,0 +1,8 @@
+{
+  "mainnet": {
+    "taikoL1Address": "0x54D8864e8855A7B66eE42B8F2Eaa0F2E06bd641a"
+  },
+  "testnet": {
+    "taikoL1Address": "0x6a5c9E342d5FB5f5EF8a799f0cAAB2678C939b0B"
+  }
+}
